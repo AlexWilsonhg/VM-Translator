@@ -7,10 +7,10 @@ class VMTranslator
 	{
 		FileInput file = new FileInput(args[0]);
 		Parser parser = new Parser();
-		Vector<String> parsedLine = parser.ParseLine(file.GetLine());
 		Translator translator = new Translator("Test.asm");
 
-		translator.TranslatePushInstruction(parsedLine);
+		Vector<String> parsedLine = parser.ParseLine(file.GetLine());
+		translator.TranslatePushPop(parsedLine);
 	}
 }
 
@@ -93,26 +93,48 @@ class Translator
 		}
 	}
 
-	public void TranslatePushInstruction(Vector<String> instruction)
+	public void TranslatePushPop(Vector<String> instruction)
 	{
 		Vector<String> translatedInstructions = new Vector<String>();
-		if(instruction.get(1).equals("constant"))
+		// push
+		if(instruction.get(0).equals("push"))
 		{
-			translatedInstructions.add("@" + instruction.get(2));
-			translatedInstructions.add("D = A");
+			if(instruction.get(1).equals("constant"))
+			{
+				translatedInstructions.add("@" + instruction.get(2));
+				translatedInstructions.add("D = A");
+			}
+			else
+			{
+				translatedInstructions.add("@" + instruction.get(1));
+				translatedInstructions.add("D = M");
+				translatedInstructions.add("@" + instruction.get(2));
+				translatedInstructions.add("A = A + D");
+				translatedInstructions.add("D = M");
+			}
+			translatedInstructions.add("@sp");
+			translatedInstructions.add("A = M");
+			translatedInstructions.add("M = D");
+			translatedInstructions.add("@sp");
+			translatedInstructions.add("M = M+1");
+		// pop
 		}
 		else
 		{
 			translatedInstructions.add("@" + instruction.get(1));
-			translatedInstructions.add("A = M+" + instruction.get(2));
 			translatedInstructions.add("D = M");
+			translatedInstructions.add("@" + instruction.get(2));
+			translatedInstructions.add("D = D + A");
+			translatedInstructions.add("@R15");
+			translatedInstructions.add("M = D");
+			translatedInstructions.add("@sp");
+			translatedInstructions.add("M = M - 1");
+			translatedInstructions.add("A = M");
+			translatedInstructions.add("D = M");
+			translatedInstructions.add("@R15");
+			translatedInstructions.add("A = M");
+			translatedInstructions.add("M = D");
 		}
-		translatedInstructions.add("@sp");
-		translatedInstructions.add("A = M");
-		translatedInstructions.add("M = D");
-		translatedInstructions.add("@sp");
-		translatedInstructions.add("M = M+1");
-
 		try
 		{
 			WriteToFile(translatedInstructions);
@@ -135,5 +157,4 @@ class Translator
 		}
 		writer.close();
 	}
-
 }
