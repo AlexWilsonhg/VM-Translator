@@ -20,5 +20,3 @@ class VMTranslator
 		fileIO.Shutdown();
 	}
 }
-
-
