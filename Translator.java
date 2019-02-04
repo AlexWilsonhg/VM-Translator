@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 class Translator
 {
 	public Vector<String> Translate(Vector<String> instruction)
@@ -19,6 +18,28 @@ class Translator
 				break;
 			case "sub":
 				translatedInstructions = TranslateSubAdd(instruction);
+				break;
+			case "neg":
+				translatedInstructions = TranslateNegate(instruction);
+				break;
+			case "eq":
+				translatedInstructions = TranslateEquals(instruction);
+				break;
+			case "gt":
+				translatedInstructions = TranslateGreaterThan(instruction);
+				break;
+			case "lt":
+				translatedInstructions = TranslateLessThan(instruction);
+				break;
+			case "and":
+				translatedInstructions = TranslateAndOr(instruction);
+				break;
+			case "or":
+				translatedInstructions = TranslateAndOr(instruction);
+				break;
+			case "not":
+				translatedInstructions = TranslateNot(instruction);
+				break;
 		}
 		return translatedInstructions;
 	}
@@ -87,6 +108,71 @@ class Translator
 		{
 			translatedInstructions.add("M = M+D");
 		}
+
+		return translatedInstructions;
+	}
+	
+	private Vector<String> TranslateNegate(Vector<String> instruction)
+	{
+		Vector<String> translatedInstructions = new Vector<String>();
+
+		translatedInstructions.add("@sp");
+		translatedInstructions.add("A=M-1");
+		translatedInstructions.add("M=M-1");
+		translatedInstructions.add("M=!M");
+
+		return translatedInstructions;
+	}
+
+	private Vector<String> TranslateEquals(Vector<String> instruction)
+	{
+		Vector<String> translatedInstructions = new Vector<String>();
+
+
+
+
+
+		return translatedInstructions;	
+	}
+
+	private Vector<String> TranslateLessThan(Vector<String> instruction)
+	{
+		return null;
+	}
+
+	private Vector<String> TranslateGreaterThan(Vector<String> instruction)
+	{
+		return null;
+	}
+
+	private Vector<String> TranslateAndOr(Vector<String> instruction)
+	{
+		Vector<String> translatedInstructions = new Vector<String>();
+
+		translatedInstructions.add("@sp");
+		translatedInstructions.add("M=M-1");
+		translatedInstructions.add("A=M");
+		translatedInstructions.add("D=M");
+		translatedInstructions.add("A=A-1");
+		if(instruction.get(0).equals("and"))
+		{
+			translatedInstructions.add("M=M&D");
+		}
+		else
+		{
+			translatedInstructions.add("M=D|M");
+		}
+
+		return translatedInstructions;
+	}
+
+	private Vector<String> TranslateNot(Vector<String> instruction)
+	{
+		Vector<String> translatedInstructions = new Vector<String>();
+
+		translatedInstructions.add("@sp");
+		translatedInstructions.add("A=M-1");
+		translatedInstructions.add("M=!M");
 
 		return translatedInstructions;
 	}
