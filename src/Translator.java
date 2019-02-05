@@ -112,7 +112,7 @@ class Translator
 		}
 		else
 		{
-			translatedInstructions.add("M = M+D");
+			translatedInstructions.add("M = D+M");
 		}
 
 		return translatedInstructions;
